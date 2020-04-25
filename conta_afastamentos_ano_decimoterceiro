@@ -1,0 +1,39 @@
+Sub dias_afastados_ano()
+lin = 2
+qtdias_ano = InputBox("digite a quantidade de dias do ano, no formato Ex: 365")
+ano_atu = InputBox("digite o ano atual no formato Ex: 2019")
+    If qtdias_ano = 366 Then
+        arr_mes = Array(31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366)
+    ElseIf qtdias_ano = 365 Then
+        arr_mes = Array(31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365)
+    End If
+While Cells(lin, 1) <> ""
+    cod_afast = Cells(lin, 2)
+    Dim qtafast_no_mes(0 To 12) As Integer
+    ini = Cells(lin, 4)
+    fim = Cells(lin, 5)
+    If Year(ini) < CInt(ano_atu) Then
+        ini = CDate("01/01/" & ano_atu)
+    End If
+    If Year(fim) > CInt(ano_atu) Then
+        fim = CDate("31/12/" & ano_atu)
+    End If
+    dia_ini = DateDiff("d", "01/01/" & ano_atu, ini) + 1
+    dia_fim = qtdias_ano - DateDiff("d", fim, "31/12/" & ano_atu)
+    acumulador = dia_ini - 1
+    i = 0
+    While arr_mes(i) < dia_fim
+        If arr_mes(i) >= dia_ini Then
+            qtafast_no_mes(i) = arr_mes(i) - acumulador
+            acumulador = acumulador + qtafast_no_mes(i)
+        End If
+        i = i + 1
+    Wend
+    qtafast_no_mes(i) = dia_fim - arr_mes(i - 1)
+    qtafast_no_mes(12) = cod_afast
+    Range(Cells(lin, 12), Cells(lin, 24)) = qtafast_no_mes
+    lin = lin + 1
+    Erase qtafast_no_mes
+    i = 0
+Wend
+End Sub
